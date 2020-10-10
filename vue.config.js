@@ -1,0 +1,19 @@
+module.exports = {
+	configureWebpack: {
+		resolve: {
+			alias: {
+				'assets': '@/assets',
+				'views' : '@/views',
+				'components' : '@/components',
+				'network' : '@/network',
+				'common' : '@/common',
+				'store' : '@/store',
+			}
+		},
+		// module: {
+		// 	rules: [
+		// 		{ test: /\.css/, use: ['style-loader', 'css-loader']}
+		// 	]
+		// }
+	}
+}
