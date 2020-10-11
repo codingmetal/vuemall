@@ -19,4 +19,13 @@
 
 body {
     user-select: none;
+    color: var(--color-text)
+}
+
+img {
+  z-index: -1
+}
+
+a {
+  color: var(--color-text)
 }
