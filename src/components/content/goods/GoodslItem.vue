@@ -1,8 +1,8 @@
 <template>
   <div @click="jump" class="goods-item">
-    <img @load="imageLoad"  :src="goodsItem.show.img" alt=""/>
+    <img @load="imageLoad" :src="ShowImg" alt=""/>
     <p class="title">{{goodsItem.title}}</p>
-    <p class="ps"><span class="price">{{goodsItem.orgPrice}}</span>&nbsp&nbsp&nbsp<span>☆{{goodsItem.cfav}}</span></p>
+    <p class="ps"><span class="price">¥{{goodsItem.price}}</span>&nbsp&nbsp&nbsp<span>☆{{goodsItem.cfav}}</span></p>
   </div>
 </template>
 
@@ -17,13 +17,23 @@ export default {
       }
     }
   },
+  computed: {
+    ShowImg() {
+      return this.goodsItem.image || this.goodsItem.show.img
+    }
+  },
   methods: {
     imageLoad() {
-      this.$bus.$emit("imgLoaded");
+      if (this.$route.path.indexOf("home") != -1) {
+        this.$bus.$emit("imgLoaded")
+      }
+      else if (this.$route.path.indexOf("detail") != -1) {
+        this.$bus.$emit("dImgLoaded")
+      }
     },
     jump() {
       this.$router.push({path: `detail/${this.goodsItem.iid}`})
-    }
+    },
   }
 }
 </script>

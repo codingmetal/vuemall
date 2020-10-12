@@ -7,10 +7,10 @@
     </nav-bar>
     <tab-control v-show="tabSticky" class="tab-sticky" ref="stickTabControl" @toggleList="toggleList" :tab-list="tabList"></tab-control>
     <scroll @scroll="contentScroll" @moreList="getMoreGoods" ref="sc" class="content">
-      <home-swiper :banners="banners"></home-swiper>
+      <my-swipe emit-name="imgLoaded" :with-link=true :banners="banners"></my-swipe>
       <recommend-list :recommends="recommends"></recommend-list>
       <feature-list></feature-list>
-      <tab-control  ref="tabControl" @toggleList="toggleList" :tab-list="tabList"></tab-control>
+      <tab-control class="home-tab-control"  ref="tabControl" @toggleList="toggleList" :tab-list="tabList"></tab-control>
       <goods-list :showGoods="showGoods"></goods-list>
 
     </scroll>
@@ -20,16 +20,15 @@
 
 <script>
 import HomeRequest from '@/network/home'
-import {debounce} from '@/common/util'
+import {debounce} from "@/common/util";
 
 import Scroll from "@/components/common/scroll/Scroll";
 import BackTop from "@/components/common/scroll/BackTop"
-
+import MySwipe from "@/components/common/swipe/MySwipe";
 import NavBar from "@/components/common/navBar/NavBar"
 import TabControl from "@/components/content/tabControl/TabControl";
 import GoodsList from "@/components/content/goods/GoodsList";
 
-import HomeSwiper from "@/views/home/childComponents/HomeSwiper";
 import RecommendList from "@/views/home/childComponents/RecommendList";
 import FeatureList from "@/views/home/childComponents/FeatureList";
 
@@ -44,7 +43,7 @@ export default {
     NavBar,
     FeatureList,
     RecommendList,
-    HomeSwiper,
+    MySwipe,
   },
   data() {
     return {
@@ -112,8 +111,6 @@ export default {
     getMoreGoods() {
       this.getHomeGoods(this.showType, () => {
         this.$refs.sc.finishPullUp()
-        console.log('get goods')
-        console.log('finish pull up')
       })
 
     },
@@ -131,7 +128,7 @@ export default {
       this.backTopShow = position.y < -500
 
       this.tabSticky = position.y < -this.stickyOffset
-    }
+    },
   },
   created() {
     this.getHomeMultiData()
@@ -140,8 +137,6 @@ export default {
     this.getHomeGoods('sell')
   },
   mounted() {
-    console.log('mounted')
-    //图片加载监听
     const refresh = debounce(this.$refs.sc.refreshScroll, 500)
     this.$bus.$on('imgLoaded', () => {
       refresh()
@@ -154,12 +149,15 @@ export default {
     }
   },
   destroyed() {
+    console.log('home destroyed')
   },
   deactivated() {
+    console.log('home deactivated')
     this.currentScroll = this.$refs.sc.getScrollOffset()
   },
   activated() {
-    this.$refs.sc.myScrollTo(0, this.currentScroll, 0)
+    console.log('home activated')
+    this.$refs.sc.myScrollTo(0, this.currentScroll, 1)
     this.$refs.sc.refreshScroll()
   }
 }
@@ -191,12 +189,8 @@ export default {
     right: 0;
 
     overflow: hidden;
-
-    /*z-index: -10000;*/
-    /*height: calc(100vh - 93px);*/
-    /*margin-top: 44px;*/
-    /*height: 500px;*/
   }
+
 </style>
 
 

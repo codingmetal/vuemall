@@ -29,3 +29,11 @@ img {
 a {
   color: var(--color-text)
 }
+
+ul {
+  list-style-type: none;
+}
+
+.border-bottom {
+  border-bottom: 10px solid #eee;
+}

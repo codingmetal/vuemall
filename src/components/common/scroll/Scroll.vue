@@ -41,10 +41,11 @@ export default {
       })
     },
     refreshScroll() {
+      console.log('scroll refresh')
       this.scroll && this.scroll.refresh()
     },
-    myScrollTo(x, y, speed) {
-      this.scroll.scrollTo(x,y,speed)
+    myScrollTo(x, y, time) {
+      this.scroll.scrollTo(x,y,time)
     },
     finishPullUp() {
       this.scroll.finishPullUp()

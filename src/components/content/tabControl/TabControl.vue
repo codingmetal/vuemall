@@ -1,8 +1,8 @@
 <template>
   <div class="tab-control">
     <ul>
-      <li @click="tabClick(index, item.type)" :class="{active: index==currentIndex}" v-for="(item, index) of tabList">
-        <span>{{item.title}}</span>
+      <li @click="tabClick(index, item.type)" :class="{active: index==currentIndex}" :key="index" v-for="(item, index) of tabList">
+        <span :class="{'no-line': isNoLine}">{{item.title}}</span>
       </li>
     </ul>
   </div>
@@ -17,6 +17,10 @@ export default {
       default() {
         return []
       },
+    },
+    isNoLine: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -63,4 +67,9 @@ export default {
     width: 130%;
     border: 1px solid var(--color-tint)
   }
+
+  .tab-control li.active span.no-line:after {
+    display: none;
+  }
+
 </style>
