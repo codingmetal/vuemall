@@ -1,7 +1,7 @@
 <template>
-  <div v-if="Object.keys(shop).length != 0" class="shop-detail">
+  <div id="shopDetail" v-if="Object.keys(shop).length != 0" class="shop-detail">
     <div class="shop-name">
-      <img @load="imageLoaded" :src="shop.shopLogo"/>
+      <img :src="shop.shopLogo"/>
       <span>{{shop.name}}</span>
     </div>
     <div class="shop-wrap">
@@ -44,11 +44,6 @@ export default {
       default() {
         return {}
       }
-    }
-  },
-  methods: {
-    imageLoaded() {
-      this.$bus.$emit('dImgLoaded')
     }
   },
   filters: {

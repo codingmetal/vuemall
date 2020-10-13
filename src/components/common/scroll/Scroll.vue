@@ -40,9 +40,11 @@ export default {
         this.$emit('moreList')
       })
     },
-    refreshScroll() {
-      console.log('scroll refresh')
+    refreshScroll(extraAction) {
+      //添加自定义行为
+      if(extraAction) extraAction()
       this.scroll && this.scroll.refresh()
+      console.log("refresh")
     },
     myScrollTo(x, y, time) {
       this.scroll.scrollTo(x,y,time)

@@ -72,7 +72,6 @@ export default {
       },
       stickyOffset: 0,
       tabSticky: false,
-      isUpdated: false,
       currentScroll: 0
     }
   },
@@ -101,7 +100,7 @@ export default {
         .then(res => {
           this.goods[type].list.push(...res.data.list)
           this.goods[type].page++
-          this.$refs.sc.scroll.refresh()
+          this.$refs.sc.refreshScroll()
           if (moreAction != undefined) moreAction()
         })
         .catch(err => {
@@ -129,6 +128,9 @@ export default {
 
       this.tabSticky = position.y < -this.stickyOffset
     },
+    getStickyOffset() {
+      this.stickyOffset = this.$refs.tabControl.$el.offsetTop
+    }
   },
   created() {
     this.getHomeMultiData()
@@ -139,14 +141,8 @@ export default {
   mounted() {
     const refresh = debounce(this.$refs.sc.refreshScroll, 500)
     this.$bus.$on('imgLoaded', () => {
-      refresh()
+      refresh(this.getStickyOffset)
     })
-  },
-  updated() {
-    if (!this.isUpdated) {
-      this.isUpdated = true
-      this.stickyOffset = this.$refs.tabControl.$el.offsetTop
-    }
   },
   destroyed() {
     console.log('home destroyed')

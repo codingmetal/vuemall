@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Object.keys(itemParams).length != 0" class="detail-params border-bottom">
+  <div id="detailParams" v-if="Object.keys(itemParams).length != 0" class="detail-params border-bottom">
 
     <div class="size">
       <table>

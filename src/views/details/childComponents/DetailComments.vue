@@ -1,5 +1,5 @@
 <template>
-  <div  class="detail-comments border-bottom">
+  <div id="detailComment" class="detail-comments border-bottom">
     <div class="comment-title">
       <p>用户评价</p>
       <a>更多</a>

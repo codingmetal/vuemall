@@ -32,7 +32,12 @@ export default {
       }
     },
     jump() {
-      this.$router.push({path: `detail/${this.goodsItem.iid}`})
+      if (this.goodsItem.iid) {
+        this.$router.push({path: `/detail/${this.goodsItem.iid}`})
+      }
+      if (this.goodsItem.item_id) {
+        this.$router.push({path: `/detail/${this.goodsItem.item_id}`})
+      }
     },
   }
 }

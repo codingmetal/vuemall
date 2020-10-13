@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Object.keys(item).length != 0" class="item-detail">
+  <div id="itemDetail" v-if="Object.keys(item).length != 0" class="item-detail">
     <div class="item-img">
       <my-swipe emit-name="dImgLoaded" class="detail-banner" :banners="item.swipeImgs"></my-swipe>
     </div>

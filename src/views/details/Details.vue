@@ -5,16 +5,16 @@
         <img @click="back" class="left" src="~assets/img/back.svg"/>
       </template>
       <template v-slot:center>
-        <TabControl @toggleList="toggleList" :is-no-line=true :tab-list="tabList"></TabControl>
+        <TabControl ref="tc" @toggleList="toggleList" :is-no-line=true :tab-list="tabList"></TabControl>
       </template>
     </nav-bar>
-    <scroll :options="options" ref="sc" class="content">
+    <scroll @scroll="contentScroll" :options="options" ref="sc" class="content">
       <item-detail :item="goods"></item-detail>
       <shop-detail :shop="shops"></shop-detail>
       <detail-images :detailInfo="detailInfo"></detail-images>
-      <detail-params :item-params="itemParams"></detail-params>
-      <detail-comments :comments="comments"></detail-comments>
-      <goods-list :show-goods="recommends"></goods-list>
+      <detail-params ref="detailParams" :item-params="itemParams"></detail-params>
+      <detail-comments ref="detailComments" :comments="comments"></detail-comments>
+      <goods-list ref="recommends" :show-goods="recommends"></goods-list>
     </scroll>
     <detail-btn-group></detail-btn-group>
   </div>
@@ -80,19 +80,48 @@ export default {
         {
           title: '推荐',
           type: 'recommend'
-        }]
+        }],
+      tabOffset: [],
     }
   },
   methods: {
     toggleList(type, index) {
-      console.log(`${index}.${type}`)
+      this.scrollTo(-(this.tabOffset[index]), 500)
     },
     back() {
       this.$router.back()
     },
-    getLocalTime(date) {
-      return new Date(parseInt(date) *1000).toLocaleString()
-    }
+    scrollTo(y, time) {
+      this.$refs.sc.myScrollTo(0, y, time)
+    },
+    getTabOffset() {
+      console.log('get offset')
+      this.tabOffset = [0]
+      this.tabOffset.push(this.$refs.detailParams.$el.offsetTop)
+      this.tabOffset.push(this.$refs.detailComments.$el.offsetTop)
+      this.tabOffset.push(this.$refs.recommends.$el.offsetTop)
+    },
+    contentScroll(position) {
+      let y = -(position.y)
+      if (y >= this.tabOffset[0] && y < this.tabOffset[1] && this.currentIndex != 0) {
+        this.currentIndex = 0;
+        this.$refs.tc.currentIndex = 0;
+        console.log(0)
+      } else if(y >= this.tabOffset[1] && y < this.tabOffset[2] && this.currentIndex != 1) {
+        this.currentIndex = 1;
+        this.$refs.tc.currentIndex = 1;
+
+        console.log(1)
+      } else if(y >= this.tabOffset[2] && y < this.tabOffset[3] && this.currentIndex != 2) {
+        this.currentIndex = 2;
+        this.$refs.tc.currentIndex = 2;
+        console.log(2)
+      } else if (y >= this.tabOffset[3] && this.currentIndex != 3){
+        this.currentIndex = 3;
+        this.$refs.tc.currentIndex = 3;
+        console.log(3)
+      }
+    },
   },
   created() {
     getItemDetail(this.$route.params.iid)
@@ -120,10 +149,15 @@ export default {
       })
   },
   mounted() {
-    const refresh = debounce(this.$refs.sc.refreshScroll, 500)
+    const refresh = debounce(this.$refs.sc.refreshScroll, 300)
+
     this.$bus.$on('dImgLoaded', () => {
-      refresh()
+      refresh(this.getTabOffset)
     })
+  },
+  destroyed() {
+    //实例销毁时记得销毁$bus!!!!!!!!
+    this.$bus.$off()
   }
 }
 
