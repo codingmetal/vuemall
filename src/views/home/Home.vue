@@ -7,9 +7,9 @@
     </nav-bar>
     <tab-control v-show="tabSticky" class="tab-sticky" ref="stickTabControl" @toggleList="toggleList" :tab-list="tabList"></tab-control>
     <scroll @scroll="contentScroll" @moreList="getMoreGoods" ref="sc" class="content">
-      <my-swipe emit-name="imgLoaded" :with-link=true :banners="banners"></my-swipe>
-      <recommend-list :recommends="recommends"></recommend-list>
-      <feature-list></feature-list>
+      <my-swipe :with-link=true :banners="banners"></my-swipe>
+<!--      <recommend-list :recommends="recommends"></recommend-list>-->
+<!--      <feature-list></feature-list>-->
       <tab-control class="home-tab-control"  ref="tabControl" @toggleList="toggleList" :tab-list="tabList"></tab-control>
       <goods-list :showGoods="showGoods"></goods-list>
 
@@ -21,9 +21,9 @@
 <script>
 import HomeRequest from '@/network/home'
 import {debounce} from "@/common/util";
+import {backTop} from "@/common/mixin";
 
 import Scroll from "@/components/common/scroll/Scroll";
-import BackTop from "@/components/common/scroll/BackTop"
 import MySwipe from "@/components/common/swipe/MySwipe";
 import NavBar from "@/components/common/navBar/NavBar"
 import TabControl from "@/components/content/tabControl/TabControl";
@@ -36,7 +36,6 @@ import FeatureList from "@/views/home/childComponents/FeatureList";
 export default {
   name: "Home",
   components: {
-    BackTop,
     Scroll,
     GoodsList,
     TabControl,
@@ -45,6 +44,7 @@ export default {
     RecommendList,
     MySwipe,
   },
+  mixins:[backTop],
   data() {
     return {
       banners: [],
@@ -64,7 +64,6 @@ export default {
         },
       ],
       showType: 'pop',
-      backTopShow: false,
       goods: {
         'pop': {page: 0, list:[]},
         'new': {page: 0, list:[]},
@@ -78,7 +77,7 @@ export default {
   computed: {
     showGoods() {
       return this.goods[this.showType].list
-    }
+    },
   },
   methods: {
     // 网络请求
@@ -88,7 +87,6 @@ export default {
           this.banners = res.data.banner.list
           this.recommends = res.data.recommend.list
 
-          // this.$refs.sc.scroll.refresh()
         })
         .catch(err => {
           console.log(err)
@@ -120,9 +118,6 @@ export default {
       this.$refs.stickTabControl.currentIndex =index
       this.$refs.tabControl.currentIndex = index
     },
-    backTop() {
-      this.$refs.sc.myScrollTo(0, 0 ,500)
-    },
     contentScroll(position) {
       this.backTopShow = position.y < -500
 
@@ -139,7 +134,7 @@ export default {
     this.getHomeGoods('sell')
   },
   mounted() {
-    const refresh = debounce(this.$refs.sc.refreshScroll, 500)
+    const refresh = debounce(this.$refs.sc.refreshScroll, 100)
     this.$bus.$on('imgLoaded', () => {
       refresh(this.getStickyOffset)
     })
@@ -150,11 +145,16 @@ export default {
   deactivated() {
     console.log('home deactivated')
     this.currentScroll = this.$refs.sc.getScrollOffset()
+    this.$bus.$off()
   },
   activated() {
     console.log('home activated')
     this.$refs.sc.myScrollTo(0, this.currentScroll, 1)
     this.$refs.sc.refreshScroll()
+    const refresh = debounce(this.$refs.sc.refreshScroll, 100)
+    this.$bus.$on('imgLoaded', () => {
+      refresh(this.getStickyOffset)
+    })
   }
 }
 

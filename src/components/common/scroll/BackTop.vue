@@ -27,7 +27,7 @@ export default {
 <style scoped>
   .back-top {
     position: absolute;
-    bottom: 59px;
+    bottom: 70px;
     right: 10px;
     padding: 10px;
     border-radius: 50px;

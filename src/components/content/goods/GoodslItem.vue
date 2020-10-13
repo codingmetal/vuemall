@@ -19,17 +19,18 @@ export default {
   },
   computed: {
     ShowImg() {
-      return this.goodsItem.image || this.goodsItem.show.img
+      if (this.goodsItem.img) {
+        return this.goodsItem.img
+      } else if (this.goodsItem.image) {
+        return this.goodsItem.image
+      } else {
+        return this.goodsItem.show.img
+      }
     }
   },
   methods: {
     imageLoad() {
-      if (this.$route.path.indexOf("home") != -1) {
-        this.$bus.$emit("imgLoaded")
-      }
-      else if (this.$route.path.indexOf("detail") != -1) {
-        this.$bus.$emit("dImgLoaded")
-      }
+      this.$bus.$emit("imgLoaded")
     },
     jump() {
       if (this.goodsItem.iid) {

@@ -16,6 +16,7 @@
       <detail-comments ref="detailComments" :comments="comments"></detail-comments>
       <goods-list ref="recommends" :show-goods="recommends"></goods-list>
     </scroll>
+    <back-top :isShow="backTopShow" @backTop="backTop"></back-top>
     <detail-btn-group></detail-btn-group>
   </div>
 </template>
@@ -23,6 +24,7 @@
 <script>
 import {getItemDetail,getRecommend, Goods, Shops} from "@/network/detail";
 import {debounce} from "@/common/util";
+import {backTop} from "@/common/mixin";
 
 import NavBar from "@/components/common/navBar/NavBar";
 import Scroll from "@/components/common/scroll/Scroll";
@@ -84,6 +86,7 @@ export default {
       tabOffset: [],
     }
   },
+  mixins: [backTop],
   methods: {
     toggleList(type, index) {
       this.scrollTo(-(this.tabOffset[index]), 500)
@@ -95,31 +98,29 @@ export default {
       this.$refs.sc.myScrollTo(0, y, time)
     },
     getTabOffset() {
-      console.log('get offset')
-      this.tabOffset = [0]
-      this.tabOffset.push(this.$refs.detailParams.$el.offsetTop)
-      this.tabOffset.push(this.$refs.detailComments.$el.offsetTop)
-      this.tabOffset.push(this.$refs.recommends.$el.offsetTop)
+      if (this.$refs.detailParams) {
+        this.tabOffset = [0]
+        this.tabOffset.push(this.$refs.detailParams.$el.offsetTop)
+        this.tabOffset.push(this.$refs.detailComments.$el.offsetTop)
+        this.tabOffset.push(this.$refs.recommends.$el.offsetTop)
+      }
     },
     contentScroll(position) {
+      this.backTopShow = position.y < -500
+
       let y = -(position.y)
       if (y >= this.tabOffset[0] && y < this.tabOffset[1] && this.currentIndex != 0) {
         this.currentIndex = 0;
         this.$refs.tc.currentIndex = 0;
-        console.log(0)
       } else if(y >= this.tabOffset[1] && y < this.tabOffset[2] && this.currentIndex != 1) {
         this.currentIndex = 1;
         this.$refs.tc.currentIndex = 1;
-
-        console.log(1)
       } else if(y >= this.tabOffset[2] && y < this.tabOffset[3] && this.currentIndex != 2) {
         this.currentIndex = 2;
         this.$refs.tc.currentIndex = 2;
-        console.log(2)
       } else if (y >= this.tabOffset[3] && this.currentIndex != 3){
         this.currentIndex = 3;
         this.$refs.tc.currentIndex = 3;
-        console.log(3)
       }
     },
   },
@@ -127,7 +128,6 @@ export default {
     getItemDetail(this.$route.params.iid)
       .then(res => {
         let data = res.result
-        this.item = res
         this.goods = new Goods(data.itemInfo, data.columns, data.shopInfo.services)
         this.shops = new Shops(data.shopInfo)
         this.detailInfo = data.detailInfo
@@ -149,9 +149,9 @@ export default {
       })
   },
   mounted() {
-    const refresh = debounce(this.$refs.sc.refreshScroll, 300)
+    const refresh = debounce(this.$refs.sc.refreshScroll, 100)
 
-    this.$bus.$on('dImgLoaded', () => {
+    this.$bus.$on('imgLoaded', () => {
       refresh(this.getTabOffset)
     })
   },

@@ -1,7 +1,7 @@
 <template>
   <div id="itemDetail" v-if="Object.keys(item).length != 0" class="item-detail">
     <div class="item-img">
-      <my-swipe emit-name="dImgLoaded" class="detail-banner" :banners="item.swipeImgs"></my-swipe>
+      <my-swipe class="detail-banner" :banners="item.swipeImgs"></my-swipe>
     </div>
     <div class="info-wrap">
       <p class="item-title">{{item.title}}</p>

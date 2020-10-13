@@ -32,7 +32,9 @@ export default {
   },
   methods: {
     jump() {
-      this.$router.push(this.path).catch(err => {})
+      if (this.$route.path.indexOf(this.path) == -1) {
+        this.$router.push(this.path).catch(err => {})
+      }
     }
   },
 };

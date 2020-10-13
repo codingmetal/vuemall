@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     imageLoaded() {
-      this.$bus.$emit('dImgLoaded')
+      this.$bus.$emit('imgLoaded')
     }
   }
 }

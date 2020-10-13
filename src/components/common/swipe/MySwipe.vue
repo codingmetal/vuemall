@@ -18,7 +18,6 @@ export default {
       type: Boolean,
       default: false
     },
-    emitName: String
   },
   data() {
     return {
@@ -31,7 +30,7 @@ export default {
   },
   methods: {
     imgLoaded() {
-      this.$bus.$emit(this.emitName)
+      this.$bus.$emit('imgLoaded')
     }
   }
 }

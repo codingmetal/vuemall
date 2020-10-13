@@ -30,8 +30,10 @@ export default {
   },
   methods: {
     tabClick(index, type) {
-      this.currentIndex = index
-      this.$emit('toggleList', type, index)
+      if (this.currentIndex != index) {
+        this.currentIndex = index
+        this.$emit('toggleList', type, index)
+      }
     }
   }
 }

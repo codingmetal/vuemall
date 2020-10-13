@@ -1,7 +1,7 @@
 <template>
   <div id="detailParams" v-if="Object.keys(itemParams).length != 0" class="detail-params border-bottom">
 
-    <div class="size">
+    <div v-if="itemParams.size" class="size">
       <table>
         <tr v-for="list in filterSize(itemParams.rule.tables[0])">
           <td v-for="item in list">
