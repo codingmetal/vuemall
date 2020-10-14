@@ -1,13 +1,9 @@
 export default {
   addCart(state, cart) {
-    const exist = state.cartItems.find(item => {return item.iid == cart.iid})
-    if (exist === undefined) {
-      cart.amount = 1;
-      cart.isChecked = true;
-      state.cartItems.push(cart)
-    } else {
-      exist.amount +=1
-    }
+    state.cartItems.push(cart)
+  },
+  increaseAmountByIid(state, iid) {
+    state.cartItems.find(item => item.iid = iid).amount++
   },
   toggleCheck(state, index) {
     state.cartItems[index].isChecked = !state.cartItems[index].isChecked
@@ -26,12 +22,10 @@ export default {
       for (const item of state.cartItems) {
         item.isChecked = false
       }
-      state.isAllPick = false
     } else {
       for (const item of state.cartItems) {
         item.isChecked = true
       }
-      state.isAllPick = true
     }
   },
   removeItem(state, index) {

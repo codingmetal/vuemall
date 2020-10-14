@@ -97,7 +97,10 @@ export default {
         price: this.cartItem.price,
         desc: this.cartItem.desc,
       }
-      this.$store.commit('addCart', item)
+      this.$store.dispatch('addCart', item)
+        .then(message => {
+          this.$toast.show(message, 2000)
+        })
     },
     toggleList(type, index) {
       this.scrollTo(-(this.tabOffset[index]), 500)
@@ -169,6 +172,7 @@ export default {
       .catch(err => {
         console.log(err)
       })
+
   },
   mounted() {
     const refresh = debounce(this.$refs.sc.refreshScroll, 100)

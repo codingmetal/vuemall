@@ -11,10 +11,10 @@ export default {
     return total.toFixed(2)
   },
   isAllPick(state) {
-    if (state.cartItems.find(item => item.isChecked == false)) {
-      return false
-    } else {
-      return true
-    }
+    if (state.cartItems.length == 0) return false
+    return !(state.cartItems.find(item => item.isChecked == false))
+  },
+  pickedCount(state) {
+    return state.cartItems.filter(item => item.isChecked == true).length
   }
 }

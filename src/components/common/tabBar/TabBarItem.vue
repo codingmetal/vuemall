@@ -45,7 +45,8 @@ export default {
     flex: 1;
     height: 49px;
     text-align: center;
-    font-size: 16px
+    font-size: 16px;
+    font-weight: lighter;
   }
 
   .tab-bar img {
