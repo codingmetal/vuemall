@@ -8,8 +8,8 @@
     <tab-control v-show="tabSticky" class="tab-sticky" ref="stickTabControl" @toggleList="toggleList" :tab-list="tabList"></tab-control>
     <scroll @scroll="contentScroll" @moreList="getMoreGoods" ref="sc" class="content">
       <my-swipe :with-link=true :banners="banners"></my-swipe>
-<!--      <recommend-list :recommends="recommends"></recommend-list>-->
-<!--      <feature-list></feature-list>-->
+      <recommend-list :recommends="recommends"></recommend-list>
+      <feature-list></feature-list>
       <tab-control class="home-tab-control"  ref="tabControl" @toggleList="toggleList" :tab-list="tabList"></tab-control>
       <goods-list :showGoods="showGoods"></goods-list>
 

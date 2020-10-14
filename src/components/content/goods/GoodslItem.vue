@@ -1,6 +1,6 @@
 <template>
   <div @click="jump" class="goods-item">
-    <img @load="imageLoad" :src="ShowImg" alt=""/>
+    <img @load="imageLoad" v-lazy="ShowImg" alt=""/>
     <p class="title">{{goodsItem.title}}</p>
     <p class="ps"><span class="price">¥{{goodsItem.price}}</span>&nbsp&nbsp&nbsp<span>☆{{goodsItem.cfav}}</span></p>
   </div>
