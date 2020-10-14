@@ -120,7 +120,6 @@ export default {
     })
   },
   activated() {
-    this.$refs.sc.refreshScroll()
     this.$bus.$on('imgLoaded', () => {
       this.debounceRefresh()
     })

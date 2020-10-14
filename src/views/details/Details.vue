@@ -17,7 +17,7 @@
       <goods-list ref="recommends" :show-goods="recommends"></goods-list>
     </scroll>
     <back-top :isShow="backTopShow" @backTop="backTop"></back-top>
-    <detail-btn-group></detail-btn-group>
+    <detail-btn-group @addCart="addCart"></detail-btn-group>
   </div>
 </template>
 
@@ -84,10 +84,21 @@ export default {
           type: 'recommend'
         }],
       tabOffset: [],
+      cartItem: {}
     }
   },
   mixins: [backTop],
   methods: {
+    addCart() {
+      const item = {
+        iid: this.cartItem.iid,
+        img: this.cartItem.img,
+        title: this.cartItem.title,
+        price: this.cartItem.price,
+        desc: this.cartItem.desc,
+      }
+      this.$store.commit('addCart', item)
+    },
     toggleList(type, index) {
       this.scrollTo(-(this.tabOffset[index]), 500)
     },
@@ -123,18 +134,29 @@ export default {
         this.$refs.tc.currentIndex = 3;
       }
     },
+    getData(data) {
+      this.goods = new Goods(data.itemInfo, data.columns, data.shopInfo.services)
+      this.shops = new Shops(data.shopInfo)
+      this.detailInfo = data.detailInfo
+      this.itemParams = data.itemParams
+      if (data.rate.cRate != 0) {
+        this.comments = data.rate.list[0];
+      }
+
+      let iteminfo = data.itemInfo
+      this.cartItem = {
+        iid: iteminfo.iid,
+        img: iteminfo.topImages[0],
+        title: iteminfo.title,
+        price: iteminfo.highNowPrice,
+        desc: iteminfo.desc,
+      }
+    }
   },
   created() {
     getItemDetail(this.$route.params.iid)
       .then(res => {
-        let data = res.result
-        this.goods = new Goods(data.itemInfo, data.columns, data.shopInfo.services)
-        this.shops = new Shops(data.shopInfo)
-        this.detailInfo = data.detailInfo
-        this.itemParams = data.itemParams
-        if (data.rate.cRate != 0) {
-          this.comments = data.rate.list[0];
-        }
+        this.getData(res.result)
       })
       .catch(err => {
         console.log(err)

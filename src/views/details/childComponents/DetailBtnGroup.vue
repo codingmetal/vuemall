@@ -13,7 +13,7 @@
       <img v-else src="~assets/img/detail/collect_active.svg"/>
       <p>收藏</p>
     </div>
-    <div class="deep-btn cart-btn">加入购物车</div>
+    <div @click="addCart" class="deep-btn cart-btn">加入购物车</div>
     <div class="deep-btn buy-btn">购买</div>
   </div>
 </template>
@@ -24,6 +24,11 @@ export default {
   data() {
     return {
       isCollected: false
+    }
+  },
+  methods: {
+    addCart() {
+      this.$emit('addCart')
     }
   }
 }
