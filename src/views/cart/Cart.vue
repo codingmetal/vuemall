@@ -65,6 +65,7 @@ export default {
     background-color: var(--color-tint);
     color: #fff;
     font-weight: bold;
+    font-size: 20px;
   }
 
   .cart-list {
